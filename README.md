@@ -1,13 +1,14 @@
-# Excel Win32com Skill
+# excel-win32com-skill
 
-使用 `win32com` 客户端操作 Excel 文件，精确控制行/图片位置。
+使用 `win32com` 客户端操作 Excel 文件，支持精确的行/图片操作。
 
 ## 功能
 
-- 删除指定行及其关联图片
-- 交换任意两行（含图片同步移动）
-- 多 Sheet 批量删除行
-- 处理同名 Shape 冲突
+- **删除指定行及其图片**：按行号删除行，同时删除该行锚定的所有图片
+- **交换任意两行（含图片）**：交换两行数据，同时移动图片到对应位置
+- **多 Sheet 批量操作**：同时对多个 Sheet 执行删除行操作
+- **统一单元格格式**：将指定列的内容格式统一为参考行的格式（如序号格式、字体、对齐等）
+- **支持同名图片处理**：通过临时重命名避免同名 Shape 冲突
 
 ## 依赖
 
@@ -15,13 +16,13 @@
 pip install pywin32
 ```
 
-需要 Windows + Microsoft Excel。
+需要 Windows + Microsoft Excel 已安装。
 
-## 使用
+## 使用方法
 
 ### 删除指定行及其图片
 
-修改 `scripts/delete_row_generic.py` 中的 `target_row`，然后运行：
+修改 `scripts/delete_row_generic.py` 中的 `target_row` 变量，然后运行：
 
 ```bash
 python scripts/delete_row_generic.py
@@ -29,7 +30,7 @@ python scripts/delete_row_generic.py
 
 ### 交换任意两行（含图片）
 
-修改 `scripts/swap_rows_generic.py` 中的 `row_a`、`row_b`，然后运行：
+修改 `scripts/swap_rows_generic.py` 中的 `row_a`、`row_b` 变量，然后运行：
 
 ```bash
 python scripts/swap_rows_generic.py
@@ -43,6 +44,24 @@ python scripts/swap_rows_generic.py
 python scripts/delete_rows_multi_sheet.py
 ```
 
+示例 `delete_map` 配置：
+```python
+delete_map = {
+    1: [3],   # 第1个 Sheet 删除第3行
+    2: [4],   # 第2个 Sheet 删除第4行
+}
+```
+
+### 统一单元格格式（如序号格式）
+
+修改 `scripts/normalize_desc_format.py` 中的 `ref_row`、`target_rows`、`col`、`sheets` 变量，然后运行：
+
+```bash
+python scripts/normalize_desc_format.py
+```
+
+示例：将 E 列所有行的 `*` 符号格式统一为 E3 的数字序号格式（`1. 2. 3. ...`），同时统一字体、换行、列宽、行高。
+
 ### 删除最后两行（固定逻辑）
 
 ```bash
@@ -55,12 +74,20 @@ python scripts/delete_last_two_rows_fixed.py
 python scripts/swap_rows_2_3.py
 ```
 
-## 文件说明
+## 脚本说明
 
-- `SKILL.md` — WorkBuddy Skill 定义文件
-- `README.md` — 本说明文档
-- `scripts/delete_row_generic.py` — 删除指定行+图片（通用）
-- `scripts/swap_rows_generic.py` — 交换任意两行（通用）
-- `scripts/delete_rows_multi_sheet.py` — 多 Sheet 批量删除行
-- `scripts/delete_last_two_rows_fixed.py` — 删除最后两行（固定）
-- `scripts/swap_rows_2_3.py` — 交换第2、3行（固定）
+| 脚本 | 功能 |
+|------|------|
+| `scripts/delete_row_generic.py` | 删除 Excel 指定行，同时删除该行锚定的所有图片 |
+| `scripts/swap_rows_generic.py` | 交换 Excel 任意两行，同时移动图片到交换后的位置 |
+| `scripts/delete_rows_multi_sheet.py` | 多 Sheet 批量删除行，支持同时操作多个 Sheet |
+| `scripts/normalize_desc_format.py` | 统一指定列的内容格式，将 `*` 符号替换为数字序号，同时统一字体、自动换行、列宽、行高 |
+| `scripts/delete_last_two_rows_fixed.py` | 删除 Excel 最后两行（固定逻辑） |
+| `scripts/swap_rows_2_3.py` | 交换 Excel 第2、3行（固定逻辑） |
+
+## 注意事项
+
+- 原文件不会被修改，结果保存为新文件
+- 同名图片（如两个 `Picture 1`）会自动重命名处理，不会误删
+- 需要退出所有 Excel 进程后再运行，避免 COM 锁文件
+- 修改脚本中的 `src` 和 `dst` 路径以适配你的文件
