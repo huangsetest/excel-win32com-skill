@@ -8,7 +8,9 @@
 - **交换任意两行（含图片）**：交换两行数据，同时移动图片到对应位置
 - **多 Sheet 批量操作**：同时对多个 Sheet 执行删除行操作
 - **统一单元格格式**：将指定列的内容格式统一为参考行的格式（如序号格式、字体、对齐等）
+- **提取行到新 Sheet**：将多个 Sheet 的指定行提取出来，合并到一个新 Sheet，并删除原 Sheet
 - **支持同名图片处理**：通过临时重命名避免同名 Shape 冲突
+- **图片自适应单元格尺寸**：提取行时自动调整图片尺寸与单元格匹配
 
 ## 依赖
 
@@ -49,6 +51,14 @@ pip install pywin32
 ```
 
 （说明：保留原内容，只把 `*` 符号改成 `1. 2. 3. ...` 数字序号格式，同时统一字体/换行/列宽/行高）
+
+### 提取行到新 Sheet
+
+```
+"C:\Users\Administrator\Desktop\2.xlsx" 将 sheet1 第5行，sheet2 第2行提取出来
+```
+
+（说明：AI 会自动提取指定行到新 Sheet3，复制列宽、开启自动换行、调整图片尺寸，并删除原 Sheet1 和 Sheet2）
 
 ### 删除最后两行（含图片）
 
@@ -106,6 +116,30 @@ python scripts/normalize_desc_format.py
 
 示例：将 E 列所有行的 `*` 符号格式统一为 E3 的数字序号格式（`1. 2. 3. ...`），同时统一字体、换行、列宽、行高。
 
+### 提取行到新 Sheet（含图片+格式）
+
+修改 `scripts/extract_rows_to_sheet3.py` 中的 `tasks` 列表，然后运行：
+
+```bash
+python scripts/extract_rows_to_sheet3.py
+```
+
+示例 `tasks` 配置：
+```python
+tasks = [
+    {'sheet_idx': 2, 'row_no': 2},  # Sheet2 第2行 -> 新Sheet 第1行
+    {'sheet_idx': 1, 'row_no': 5},  # Sheet1 第5行 -> 新Sheet 第2行
+]
+```
+
+脚本会自动：
+- 创建/使用 `Sheet3` 作为目标 Sheet
+- 复制指定行（含图片）到新 Sheet
+- 按源 Sheet1 的列宽设置新 Sheet
+- 开启自动换行
+- 调整图片尺寸与单元格匹配
+- 删除原 Sheet1 和 Sheet2
+
 ### 删除最后两行（固定逻辑）
 
 ```bash
@@ -126,6 +160,7 @@ python scripts/swap_rows_2_3.py
 | `scripts/swap_rows_generic.py` | 交换 Excel 任意两行，同时移动图片到交换后的位置 |
 | `scripts/delete_rows_multi_sheet.py` | 多 Sheet 批量删除行，支持同时操作多个 Sheet |
 | `scripts/normalize_desc_format.py` | 统一指定列的内容格式，将 `*` 符号替换为数字序号，同时统一字体、自动换行、列宽、行高 |
+| `scripts/extract_rows_to_sheet3.py` | 将多个 Sheet 的指定行提取到新 Sheet（Sheet3），含图片复制、列宽设置、自动换行、图片尺寸自适应 |
 | `scripts/delete_last_two_rows_fixed.py` | 删除 Excel 最后两行（固定逻辑） |
 | `scripts/swap_rows_2_3.py` | 交换 Excel 第2、3行（固定逻辑） |
 
@@ -135,3 +170,5 @@ python scripts/swap_rows_2_3.py
 - 同名图片（如两个 `Picture 1`）会自动重命名处理，不会误删
 - 需要退出所有 Excel 进程后再运行，避免 COM 锁文件
 - 修改脚本中的 `src` 和 `dst` 路径以适配你的文件
+- 组合图形（Group Shape）也能正确复制
+- 图片会自动调整为与单元格相同的尺寸
