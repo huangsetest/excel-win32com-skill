@@ -18,7 +18,51 @@ pip install pywin32
 
 需要 Windows + Microsoft Excel 已安装。
 
-## 使用方法
+## 聊天命令举例（直接对 AI 说）
+
+以下是实际对话中的命令举例，可以直接对 AI 说，AI 会自动调用对应脚本完成操作。
+
+### 删除行
+
+```
+"C:\Users\Administrator\Desktop\2.xlsx" 删除第五行
+```
+
+```
+"C:\Users\Administrator\Desktop\2.xlsx" 将 sheet1 第3行删掉 和 sheet2 的第4行删掉
+```
+
+### 交换行
+
+```
+"C:\Users\Administrator\Desktop\2.xlsx" 交换第2行和第5行
+```
+
+```
+"C:\Users\Administrator\Desktop\2.xlsx" 将第2行和第3行交换一下
+```
+
+### 统一格式
+
+```
+"C:\Users\Administrator\Desktop\2.xlsx" 将所有行的 description 的文字，序号格式和 E3 一致
+```
+
+（说明：保留原内容，只把 `*` 符号改成 `1. 2. 3. ...` 数字序号格式，同时统一字体/换行/列宽/行高）
+
+### 删除最后两行（含图片）
+
+```
+"C:\Users\Administrator\Desktop\2 - 副本.xlsx" 用 win32com 将最后两行连图片删掉，其他行的图片保留
+```
+
+### 通用说明
+
+- 文件路径用引号包裹（路径含空格时必须加引号）
+- 不修改源文件，结果自动保存为新文件（如 `2_删除第5行.xlsx`）
+- 支持中文自然语言描述，AI 会自动识别意图并调用对应脚本
+
+## 使用方法（手动运行脚本）
 
 ### 删除指定行及其图片
 
