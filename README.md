@@ -6,6 +6,7 @@
 
 - 删除指定行及其关联图片
 - 交换任意两行（含图片同步移动）
+- 多 Sheet 批量删除行
 - 处理同名 Shape 冲突
 
 ## 依赖
@@ -20,7 +21,7 @@ pip install pywin32
 
 ### 删除指定行及其图片
 
-修改 `scripts/delete_row_generic.py` 中的 `target_row` 变量，然后运行：
+修改 `scripts/delete_row_generic.py` 中的 `target_row`，然后运行：
 
 ```bash
 python scripts/delete_row_generic.py
@@ -28,10 +29,18 @@ python scripts/delete_row_generic.py
 
 ### 交换任意两行（含图片）
 
-修改 `scripts/swap_rows_generic.py` 中的 `row_a`、`row_b` 变量，然后运行：
+修改 `scripts/swap_rows_generic.py` 中的 `row_a`、`row_b`，然后运行：
 
 ```bash
 python scripts/swap_rows_generic.py
+```
+
+### 多 Sheet 批量删除行
+
+修改 `scripts/delete_rows_multi_sheet.py` 中的 `delete_map`（按 Sheet 索引），然后运行：
+
+```bash
+python scripts/delete_rows_multi_sheet.py
 ```
 
 ### 删除最后两行（固定逻辑）
@@ -52,5 +61,6 @@ python scripts/swap_rows_2_3.py
 - `README.md` — 本说明文档
 - `scripts/delete_row_generic.py` — 删除指定行+图片（通用）
 - `scripts/swap_rows_generic.py` — 交换任意两行（通用）
+- `scripts/delete_rows_multi_sheet.py` — 多 Sheet 批量删除行
 - `scripts/delete_last_two_rows_fixed.py` — 删除最后两行（固定）
 - `scripts/swap_rows_2_3.py` — 交换第2、3行（固定）
